@@ -31,8 +31,6 @@ functions:
     environment:
       IOT_AWS_REGION: 'us-east-2'
       IOT_ENDPOINT_HOST: 'a2bw38fyyhfvxf-ats.iot.us-east-2.amazonaws.com'
-      IOT_ACCESS_KEY: 'AKIATTP7EYJ3DG4ABW5P'
-      IOT_SECRET_KEY: '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'
   notifyDisconnect:
     handler: src/notifyDisconnect.handler
     timeout: 30
