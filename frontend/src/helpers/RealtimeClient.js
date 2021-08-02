@@ -14,58 +14,65 @@ const validateClientConnected = (client) => {
     }
 };
 
-export default (clientId, username) => {
-    const options = {
-        will: {
-            topic: LAST_WILL_TOPIC,
-            payload: getNotification(clientId, username),
-        }
+class RealtimeClient { 
+    constructor({
+        clientId,
+        username,
+    }) {
+        this.options = {
+            will: {
+                topic: LAST_WILL_TOPIC,
+                payload: getNotification(clientId, username),
+            }
+        };
+        this.clientId = clientId;
+        this.username = username;
+        this.client = null;
     };
-    let client = null;
 
-    const clientWrapper = {};
-    clientWrapper.connect = () => {
-        return request('/iot-presigned-url')
+    connect = () => {
+        return request('/dev/iot-presigned-url')
             .then(response => {
-                client = mqtt.connect(response.body.url, options);
-                client.on('connect', () => {
+                this.client = mqtt.connect(response.body.url, this.options);
+                this.client.on('connect', () => {
                     console.log('Connected to AWS IoT Broker');
-                    client.subscribe(MESSAGE_TOPIC);
-                    client.subscribe(CLIENT_CONNECTED);
-                    client.subscribe(CLIENT_DISCONNECTED);
-                    const connectNotification = getNotification(clientId, username);
-                    client.publish(CLIENT_CONNECTED, connectNotification);
+                    this.client.subscribe(MESSAGE_TOPIC);
+                    this.client.subscribe(CLIENT_CONNECTED);
+                    this.client.subscribe(CLIENT_DISCONNECTED);
+                    const connectNotification = getNotification(this.clientId, this.username);
+                    this.client.publish(CLIENT_CONNECTED, connectNotification);
                     console.log('Sent message: ${CLIENT_CONNECTED} - ${connectNotification}');
                 });
-                client.on('close', () => {
+                this.client.on('close', () => {
                     console.log('Connection to AWS IoT Broker closed');
-                    client.end();
+                    this.client.end();
                 });
             })
     }
-    clientWrapper.onConnect = (callback) => {
-        validateClientConnected(client)
-        client.on('connect', callback);
-        return clientWrapper;
+    onConnect = (callback) => {
+        validateClientConnected(this.client)
+        this.client.on('connect', callback);
+        return this;
     };
-    clientWrapper.onDisconnect = (callback) => {
-        validateClientConnected(client)
-        client.on('close', callback);
-        return clientWrapper;
+    onDisconnect = (callback) => {
+        validateClientConnected(this.client)
+        this.client.on('close', callback);
+        return this;
     };
-    clientWrapper.onMessageReceived = (callback) => {
-        validateClientConnected(client)
-        client.on('message', (topic, message) => {
+    onMessageReceived = (callback) => {
+        validateClientConnected(this.client)
+        this.client.on('message', (topic, message) => {
             console.log('Received message: ${topic} - ${message}');
             callback(topic, JSON.parse(message.toString('utf8')));
         });
-        return clientWrapper;
+        return this;
     };
-    clientWrapper.sendMessage = (message) => {
-        validateClientConnected(client)
-        client.publish(MESSAGE_TOPIC, JSON.stringify(message));
+    sendMessage = (message) => {
+        validateClientConnected(this.client)
+        this.client.publish(MESSAGE_TOPIC, JSON.stringify(message));
         console.log('Sent message: ${MESSAGE_TOPIC} - ${JSON.stringify(message)}');
-        return clientWrapper;
+        return this;
     };
-    return clientWrapper;
 };
+
+export default RealtimeClient;

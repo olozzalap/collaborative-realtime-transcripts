@@ -1,10 +1,12 @@
 import React from 'react';
+import App from '../components/App';
 
 const CRTPage = () => {
     return (
-        <div className="CRTPage">
+        <main className="CRTPage">
             <h1>Bloop</h1>
-        </div>
+            <App />
+        </main>
     );
 }
 
