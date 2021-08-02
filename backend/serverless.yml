@@ -1,0 +1,44 @@
+service: crt-backend
+
+plugins:
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: dev
+  region: us-east-2
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "iot:Connect"
+        - "iot:Publish"
+        - "iot:Subscribe"
+        - "iot:Receive"
+        - "iot:GetThingShadow"
+        - "iot:UpdateThingShadow"
+      Resource: "*"
+
+functions:
+  iotPresignedUrl:
+    handler: src/iotPresignedUrl.handler
+    timeout: 30
+    events:
+      - http: OPTIONS /iot-presigned-url
+      - http:
+          method: GET
+          path: /iot-presigned-url
+    environment:
+      IOT_AWS_REGION: 'us-east-2'
+      IOT_ENDPOINT_HOST: 'a2bw38fyyhfvxf-ats.iot.us-east-2.amazonaws.com'
+      IOT_ACCESS_KEY: 'AKIATTP7EYJ3DG4ABW5P'
+      IOT_SECRET_KEY: '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'
+  notifyDisconnect:
+    handler: src/notifyDisconnect.handler
+    timeout: 30
+    events:
+      - iot:
+          sql: "SELECT * FROM 'last-will'"
+    environment:
+      IOT_AWS_REGION: 'us-east-2'
+      IOT_ENDPOINT_HOST: 'a2bw38fyyhfvxf-ats.iot.us-east-2.amazonaws.com'
