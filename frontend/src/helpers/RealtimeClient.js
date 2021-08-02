@@ -31,7 +31,7 @@ class RealtimeClient {
     };
 
     connect = () => {
-        return request('/dev/iot-presigned-url')
+        return request('https://irk2w3fzf3.execute-api.us-east-2.amazonaws.com/dev/iot-presigned-url')
             .then(response => {
                 this.client = mqtt.connect(response.body.url, this.options);
                 this.client.on('connect', () => {
