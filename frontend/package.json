@@ -1,6 +1,7 @@
 {
   "name": "crt-frontend",
   "version": "0.0.1",
+  "description": "Collaborative Realtime Transcripts - Frontend",
   "dependencies": {
     "@emotion/react": "^11.4.0",
     "@emotion/styled": "^11.3.0",
@@ -23,6 +24,15 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/olozzalap/collaborative-realtime-transcripts.git"
+  },
+  "author": "Eben Palazzolo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/olozzalap/collaborative-realtime-transcripts/issues"
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -40,6 +50,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "proxy": "http://localhost:8080"
+  }
 }

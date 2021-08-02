@@ -1,0 +1,18 @@
+{
+  "name": "collaborative-realtime-transcripts",
+  "version": "0.1.0",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "cd backend && npm start",
+    "dev": "cd backend && npm dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/olozzalap/collaborative-realtime-transcripts.git"
+  },
+  "author": "Eben Palazzolo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/olozzalap/collaborative-realtime-transcripts/issues"
+  }
+}
