@@ -16,4 +16,5 @@ const MutationSchema = new Schema({
 	}
 });
 
-module.exports = Mutation = mongoose.model('mutation', UserSchema);
+const Mutation = mongoose.model('mutation', MutationSchema);
+module.exports = Mutation;
