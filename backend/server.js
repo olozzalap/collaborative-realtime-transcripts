@@ -7,12 +7,10 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 require('dotenv').config();
 
-const db = require('./config/keys').mongoURI;
+const mongoUri = require('./config/keys').mongoURI;
 const { getAllConversations } = require('./controllers/conversationsController');
+const { submitMutation } = require('./controllers/mutationsController');
 const index = require('./routes/index');
-
-// const User = require('./models/User');
-// const Game = require('./models/Game');
 
 // Static port needed to ensure React frontend can connect to Socket.io when deployed
 const ioPort = 4797;
@@ -51,6 +49,7 @@ const app = express()
         })
     })
     .get('/conversations', (req, res) => getAllConversations(req, res))
+    .post('/mutations', (req, res) => submitMutation(req, res))
 
 
 const server = require('http').createServer(app);
@@ -59,3 +58,9 @@ server.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 const io = require("socket.io")(server);
 
 // MongoDB
+console.warn(`
+    mongoUri is: ${mongoUri}
+    `)
+mongoose.connect(mongoUri)
+    .then(() => console.log("MongoDB connected"))
+    .catch((err) => console.log(err))

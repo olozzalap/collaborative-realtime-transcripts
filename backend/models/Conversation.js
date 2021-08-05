@@ -3,15 +3,8 @@ const Schema = mongoose.Schema;
 const Mutation = require('./Mutation');
 
 const ConversationSchema = new Schema({
-	mutations: [ {
-		mutationId: {type: Schema.Types.ObjectId, ref: 'Mutation'},
-		authorIndex: {type: Number}, // 0: Bob, 1: Alice
-		index: {type: Number},
-		isInsert: {type: Boolean}, // true: insert operation, false: delete operation
-		length: {type: Number},
-		origin: [Number],
-		text: {type: String},
-	}],
+	_id: Schema.Types.ObjectId,
+	mutations: [{type: Schema.Types.ObjectId, ref: 'mutation'}],
 	title: {type: String},
 	createdAt: {
 		type: Date,
