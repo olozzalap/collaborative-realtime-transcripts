@@ -9,7 +9,7 @@ const MutationSchema = new Schema({
     index: {type: Number},
     isInsert: {type: Boolean}, // true: insert operation, false: delete operation
     length: {type: Number},
-    origin: [Number, Number],
+    origin: [Number, Number], // [numBobMutations, numAliceMutations]
     text: {type: String},
 	createdAt: {
 		type: Date,

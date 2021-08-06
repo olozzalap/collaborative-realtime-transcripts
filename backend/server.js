@@ -5,6 +5,7 @@ const socketIO = require("socket.io");
 const axios = require("axios");
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cors = require('cors')
 require('dotenv').config();
 
 const mongoUri = require('./config/keys').mongoURI;
@@ -20,6 +21,7 @@ const PORT = process.env.PORT || 4000;
 // Express server
 const app = express()
     .use(express.static(path.join(__dirname, '../frontend/build')))
+    .use(cors())
     .get('/', (req, res) => {// Root React FE App
         res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
     })

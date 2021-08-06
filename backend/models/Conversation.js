@@ -13,7 +13,12 @@ const ConversationSchema = new Schema({
 	lastMutationAt: {
 		type: Date,
 		default: Date.now()	
-	}
+	},
+	/*
+		Based on lastMutation's origin[] plus an increment for either index depending if bob/alice
+		USed to quickly determine if a new mutation needs transforming
+	*/
+	mutationCounts: [Number, Number]
 });
 
 const Conversation = mongoose.model('conversation', ConversationSchema);
