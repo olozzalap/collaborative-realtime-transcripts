@@ -9,9 +9,8 @@ const cors = require('cors')
 require('dotenv').config();
 
 const mongoUri = require('./config/keys').mongoURI;
-const { getAllConversations } = require('./controllers/conversationsController');
+const { createConversation, deleteConversation, getAllConversations } = require('./controllers/conversationsController');
 const { submitMutation } = require('./controllers/mutationsController');
-const index = require('./routes/index');
 
 // Static port needed to ensure React frontend can connect to Socket.io when deployed
 const ioPort = 4797;
@@ -51,6 +50,8 @@ const app = express()
         })
     })
     .get('/conversations', (req, res) => getAllConversations(req, res))
+    .post('/conversations', (req, res) => createConversation(req, res))
+    .delete('/conversations', (req, res) => deleteConversation(req, res))
     .post('/mutations', (req, res) => submitMutation(req, res))
 
 

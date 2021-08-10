@@ -4,7 +4,6 @@ import './index.css';
 import CRTPage from './pages/CRTPage';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap/dist/css/bootstrap-theme.css';
 
 
 ReactDOM.render(

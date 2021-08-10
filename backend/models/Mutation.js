@@ -5,11 +5,11 @@ const Conversation = require('./Conversation');
 const MutationSchema = new Schema({
     _id: Schema.Types.ObjectId,
     conversation: {type: Schema.Types.ObjectId, ref: 'conversation'},
-	authorIndex: {type: Number}, // 0: Bob, 1: Alice
+	author: {type: String},
     index: {type: Number},
     isInsert: {type: Boolean}, // true: insert operation, false: delete operation
     length: {type: Number},
-    origin: [Number, Number], // [numBobMutations, numAliceMutations]
+    origin: {type: Object}, // { author: numMutations }
     text: {type: String},
 	createdAt: {
 		type: Date,

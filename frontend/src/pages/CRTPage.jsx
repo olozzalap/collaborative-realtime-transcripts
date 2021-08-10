@@ -1,33 +1,30 @@
 import React, { useEffect, useState } from 'react';
+import ConversationList from '../components/ConversationList';
+import Editor from '../components/Editor';
+import TopBar from '../components/TopBar';
+
+const defaultAuthors = ['Bob', 'Alice'];
 
 const CRTPage = () => {
-    const [allConvos, setAllConvos] = useState([]);
-
-    useEffect(() => {
-        const fetchAllConvos = async () => {
-            const allConvosRes = await fetch('http://localhost:4000/conversations');
-            const allConvosJson = await allConvosRes.json();
-            setAllConvos(allConvosJson)
-        };
-        if (!allConvos?.length) {
-            fetchAllConvos();
-        }
-    }, []);
-
-    console.warn(allConvos)
-
+    // Initially set a random author from defaultAuthors, user can change this
+    const [author, setAuthor] = useState(defaultAuthors[Math.floor(Math.random() * defaultAuthors.length)]);
+    const [selectedConversation, setSelectedConversation] = useState(null);
 
     return (
-        <main className="CRTPage">
-            <h1>Bloop</h1>
-            {allConvos.map( (convo) => (
-                <div>
-                    <h2>{convo.title}</h2>
-                    <p>createdAt: {new Date(convo.createdAt).toLocaleDateString()}</p>
-                    <p>lastMutationAt: {new Date(convo.lastMutationAt).toLocaleDateString()}</p>
-                    <p>mutationCounts | Bob: {convo?.mutationCounts?.[0]} | Alice: {convo?.mutationCounts?.[1]}</p>
-                </div>
-            ))}
+        <main id="CRTPage">
+            <TopBar 
+                author={author}
+                setAuthor={setAuthor}
+            />
+            {selectedConversation ? 
+                <Editor
+                    author={author}
+                    conversation={selectedConversation}
+                /> :
+                <ConversationList
+                    setSelectedConversation={setSelectedConversation}
+                />
+            }
         </main>
     );
 }

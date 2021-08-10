@@ -6,6 +6,11 @@ const ConversationSchema = new Schema({
 	_id: Schema.Types.ObjectId,
 	mutations: [{type: Schema.Types.ObjectId, ref: 'mutation'}],
 	title: {type: String},
+	/*
+		Based on the most recent mutations origin plus an increment for that mutation
+		Used to quickly determine if a new mutation needs transforming
+	*/
+	originState: {type: Object}, // { author: numMutations }
 	createdAt: {
 		type: Date,
 		default: Date.now()
@@ -14,11 +19,6 @@ const ConversationSchema = new Schema({
 		type: Date,
 		default: Date.now()	
 	},
-	/*
-		Based on lastMutation's origin[] plus an increment for either index depending if bob/alice
-		USed to quickly determine if a new mutation needs transforming
-	*/
-	mutationCounts: [Number, Number]
 });
 
 const Conversation = mongoose.model('conversation', ConversationSchema);

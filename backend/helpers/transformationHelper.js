@@ -34,32 +34,34 @@ const parseConversationText = (mutations) => {
 };
 
 
-const transformMutation = (newMutation, oldMutations, mutationCounts) => {
+const transformMutation = (newMutation, existingMutations) => {
     let updatedNewMutation = Object.assign({}, newMutation);
-    const newMutationOrigin = newMutation.origin
-    let transformIndex = oldMutations.length - 1;
+    const newMutationOrigin = updatedNewMutation.origin;
+    const newMutationOriginKeys = Object.keys(newMutationOrigin);
+    let transformIndex = existingMutations.length - 1;
 
-    // works backwards to figure out where to start transforming from
+
+    // Iterate backwards over mutations till we're back to matching origins and can proceed with mutation
     while (
-        newMutationOrigin[0] < oldMutations[transformIndex].origin[0] ||
-        newMutationOrigin[1] < oldMutations[transformIndex].origin[1]
+        newMutationOriginKeys.length !== Object.keys(existingMutations[transformIndex].origin).length || 
+        newMutationOriginKeys.find(author => newMutationOrigin[author] < existingMutations[transformIndex].origin[author])
     ) {
-        const oldMutation = oldMutations[transformIndex];
+        const existingMutation = existingMutations[transformIndex];
 
-        if (oldMutation.isInsert && oldMutation.index < newMutation.index) {
-            newMutation.index += oldMutation.length;
-        } else if (oldMutation.index <= newMutation.index) {
-            newMutation.index -= oldMutation.length;
+        if (existingMutation.isInsert && existingMutation.index < updatedNewMutation.index) {
+            updatedNewMutation.index += existingMutation.length;
+        } else if (!existingMutation.isInsert && existingMutation.index <= updatedNewMutation.index) {
+            updatedNewMutation.index -= existingMutation.length;
         }
 
         transformIndex -= 1;
     }
 
-    const mostRecentOldMutation = oldMutations[oldMutations.length - 1];
-    newMutation.origin = mostRecentOldMutation.origin;
-    newMutation.origin[mostRecentOldMutation.authorIndex] += 1;
+    const mostRecentExistingMutation = existingMutations[existingMutations.length - 1];
+    updatedNewMutation.origin = mostRecentExistingMutation.origin;
+    updatedNewMutation.origin[mostRecentExistingMutation.author] += 1;
 
-    return newMutation;
+    return updatedNewMutation;
 };
 
 
