@@ -20,8 +20,10 @@ const CRTPage = () => {
                 <Editor
                     author={author}
                     conversation={selectedConversation}
+                    setSelectedConversation={setSelectedConversation}
                 /> :
                 <ConversationList
+                    author={author}
                     setSelectedConversation={setSelectedConversation}
                 />
             }

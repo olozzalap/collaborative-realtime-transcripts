@@ -7,31 +7,33 @@ const createConversation = async (req, res) => {
         "ok": true,
         "msg": '',
         "newConversation": null,
+        "text": "",
     };
 
     try {
         const initMutation = new Mutation({
-            author: req.author,
+            author: req.body.author,
             index: 0,
             isInsert: true,
             length: 1,
-            origin: {},
+            origin: "{}",
             text: ' ',
         });
         const newConversation = new Conversation({
             mutations: [initMutation],
-            title: req.title,
-            originState: {
-                [req.author]: 1,
-            },
+            title: req.body.title,
+            originState: JSON.stringify({
+                [req.body.author]: 1,
+            }),
         });
 
-        initMutation.conversation = newConversation;
+        initMutation.conversation = newConversation.id;
 
         await initMutation.save();
         await newConversation.save();
 
         respJson.newConversation = newConversation;
+        respJson.text = ' ';
     } catch (e) {
         respJson.msg = `ERROR: ${JSON.stringify(e)}`;
         respJson.ok = false;
@@ -41,13 +43,19 @@ const createConversation = async (req, res) => {
 };
 
 const deleteConversation = async (req, res) => {
+    console.warn(`
+        deleteConversation
+        req.body.id is: ${req.body.id}
+        `)
     const respJson = {
         "ok": true,
         "msg": '',
     };
 
     try {
-        await Conversation.deleteOne({ id: req.id });
+        const conversationToDelete = await Conversation.findById(req.body.id);
+        console.warn(conversationToDelete);
+        await conversationToDelete.delete();
         respJson.msg = 'success';
     } catch (e) {
         respJson.msg = `ERROR: ${JSON.stringify(e)}`;

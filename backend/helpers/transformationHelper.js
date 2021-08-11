@@ -4,6 +4,11 @@
     text: String
 */
 const parseSingleMutation = (mutation, convoText) => {
+    // console.warn(`
+    //     parseSingleMutation
+    //     mutation is: ${JSON.stringify(mutation)}
+    //     convoText is: ${convoText}
+    // `);
     const {
         index,
         isInsert,
@@ -24,10 +29,6 @@ const parseSingleMutation = (mutation, convoText) => {
 const parseConversationText = (mutations) => {
     let text = '';
     mutations.forEach(mutation => {
-        console.warn(`
-            parseConversationText iteration
-            mutation is: `)
-        console.warn(mutation)
         text = parseSingleMutation(mutation, text);
     })
     return text;

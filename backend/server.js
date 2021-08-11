@@ -1,10 +1,6 @@
-const express = require("express");
+const express = require('express');
 const path = require('path');
-const http = require("http");
-const socketIO = require("socket.io");
-const axios = require("axios");
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
 const cors = require('cors')
 require('dotenv').config();
 
@@ -12,53 +8,56 @@ const mongoUri = require('./config/keys').mongoURI;
 const { createConversation, deleteConversation, getAllConversations } = require('./controllers/conversationsController');
 const { submitMutation } = require('./controllers/mutationsController');
 
-// Static port needed to ensure React frontend can connect to Socket.io when deployed
-const ioPort = 4797;
 const PORT = process.env.PORT || 4000;
 
 
 // Express server
-const app = express()
-    .use(express.static(path.join(__dirname, '../frontend/build')))
-    .use(cors())
-    .get('/', (req, res) => {// Root React FE App
-        res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
+const app = express();
+
+app.use(express.json()) // for parsing application/json
+// app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+
+app.use(express.static(path.join(__dirname, '../frontend/build')));
+app.use(cors());
+app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+
+app.get('/', (req, res) => {// Root React FE App
+    res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
+})
+app.get('/ping', (req, res) => {
+    res.json({
+        "ok": true,
+        "msg": "pong"
     })
-    .get('/ping', (req, res) => {
-        res.json({
-            "ok": true,
-            "msg": "pong"
-        })
+})
+app.get('/info', (req, res) => {
+    res.json({
+        "ok": true,
+        "author": {
+            "email": "olozzalap@gmail.com",
+            "name": "Eben Palazzolo"
+        },
+        "frontend": {
+            "url": "string, the url of your frontend."
+        },
+        "language": "BE: Node | FE: React",
+        "sources": "https://github.com/olozzalap/collaborative-realtime-transcripts",
+        "answers": {
+            "1": "string, answer to the question 1",
+            "2": "string, answer to the question 2",
+            "3": "string, answer to the question 3"
+        }
     })
-    .get('/info', (req, res) => {
-        res.json({
-            "ok": true,
-            "author": {
-                "email": "olozzalap@gmail.com",
-                "name": "Eben Palazzolo"
-            },
-            "frontend": {
-                "url": "string, the url of your frontend."
-            },
-            "language": "BE: Node | FE: React",
-            "sources": "https://github.com/olozzalap/collaborative-realtime-transcripts",
-            "answers": {
-                "1": "string, answer to the question 1",
-                "2": "string, answer to the question 2",
-                "3": "string, answer to the question 3"
-            }
-        })
-    })
-    .get('/conversations', (req, res) => getAllConversations(req, res))
-    .post('/conversations', (req, res) => createConversation(req, res))
-    .delete('/conversations', (req, res) => deleteConversation(req, res))
-    .post('/mutations', (req, res) => submitMutation(req, res))
+})
+app.get('/conversations', (req, res) => getAllConversations(req, res))
+app.post('/conversations', (req, res) => createConversation(req, res))
+app.delete('/conversations', (req, res) => deleteConversation(req, res))
+app.post('/mutations', (req, res) => submitMutation(req, res))
 
 
-const server = require('http').createServer(app);
-server.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+// const server = require('http').createServer(app);
 // Socket.io instance
-const io = require("socket.io")(server);
+// const io = require("socket.io")(server);
 
 // MongoDB
 console.warn(`
