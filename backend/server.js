@@ -22,7 +22,7 @@ app.use(cors());
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 
 app.get('/', (req, res) => {// Root React FE App
-    res.sendFile('/frontend/build/index.html');
+    res.sendFile('/app/frontend/build/index.html');
 });
 app.get('/ping', (req, res) => {
     res.json({

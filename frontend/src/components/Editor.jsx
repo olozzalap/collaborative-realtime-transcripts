@@ -114,6 +114,7 @@ const Editor = ({
                         inputRef?.current?.selectionStart is: ${inputRef?.current?.selectionStart}
                          newCursorIndex is: ${newCursorIndex}
                          `)
+                    // eslint-disable-next-line no-unused-expressions
                     inputRef?.current?.setSelectionRange(newCursorIndex, newCursorIndex);
 
                     mutationState.current = {
