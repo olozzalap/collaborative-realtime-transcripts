@@ -1,0 +1,3 @@
+BE: https://pacific-headland-95504.herokuapp.com/
+FE: https://pacific-headland-95504.herokuapp.com/
+Repo: https://github.com/olozzalap/collaborative-realtime-transcripts

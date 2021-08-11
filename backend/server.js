@@ -38,14 +38,14 @@ app.get('/info', (req, res) => {
             "name": "Eben Palazzolo"
         },
         "frontend": {
-            "url": "string, the url of your frontend."
+            "url": "https://pacific-headland-95504.herokuapp.com/"
         },
         "language": "BE: Node | FE: React",
         "sources": "https://github.com/olozzalap/collaborative-realtime-transcripts",
         "answers": {
-            "1": "string, answer to the question 1",
-            "2": "string, answer to the question 2",
-            "3": "string, answer to the question 3"
+            "1": "My approach was broadly to tackle the greatest complexity first which revolved around working through the BE transformation data logic first, then moving to put together the FE and tyhen using both to iterate, test and improve! I focused on clean code and performance throughout as well as managing the complexity of all the states in text input and manipulation.",
+            "2": "Websocket or Socket.io full duplex communication to actively push updates from other users into other transcripts live and visualize the changes as they happen.",
+            "3": "This is an insanely detailed challenge, especially given the spec and details really expect a very thorough solution. I think this needs to be rethought and massively lowered in Scope as this is far too much Engineering for a short take-home."
         }
     })
 })
@@ -55,14 +55,7 @@ app.delete('/conversations', (req, res) => deleteConversation(req, res))
 app.post('/mutations', (req, res) => submitMutation(req, res))
 
 
-// const server = require('http').createServer(app);
-// Socket.io instance
-// const io = require("socket.io")(server);
-
 // MongoDB
-console.warn(`
-    mongoUri is: ${mongoUri}
-    `)
 mongoose.connect(mongoUri)
     .then(() => console.log("MongoDB connected"))
     .catch((err) => console.log(err))
