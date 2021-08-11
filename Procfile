@@ -1,1 +1,1 @@
-web: cd backend; npm install; npm run start & cd ../frontend; npm install; echo 'Success'
+web: cd backend; npm install; npm run start & cd ../frontend; npm install --production
